@@ -3,18 +3,27 @@ import reducer from './reducer'
 
 describe('reducer', () => {
   it('handles SET_ITEM_COUNT', () => {
+    // given
     const state = fromJS({
-      items: {
-        500: {
-          count: 0
-        }
-      }
+      items: [{
+        facial: 500,
+        count: 2
+      }]
     })
     
-    const newState = reducer(state, {type: 'SET_ITEM_COUNT', facial: '500', count: 2})
+    // when
+    const newState = reducer(state, {type: 'SET_ITEM_COUNT', facial: 500, count: 54})
     
-    console.log(newState)
+    // then
+    let ind = state.get('items')
+        .findIndex(i => i.facial === 500)
+    const count = state.getIn(['items', ind, 'count'])
     
-    expect(newState.getIn(['items', '500', 'count'])).toBe(2)
+    ind = newState.get('items')
+        .findIndex(i => i.facial === 500)
+    const newCount = newState.getIn(['items', ind, 'count'])
+    
+    expect(count).toBe(2)
+    expect(newCount).toBe(54)
   })
 })
