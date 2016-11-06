@@ -1,21 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {connect} from 'react-redux'
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+      <ul>
+          {this.props.items.map(it => {
+            return (
+              <li>
+                <h3>{it.get('facial')} €</h3>
+                <p>{it.get('count')}</p>
+              </li>
+            )
+          })}
+      </ul>
+    )
   }
 }
 
-export default App;
+
+function mapStateToProps(state) {
+  return {
+    items: state.get('items')
+  }
+}
+
+const AppContainer = connect(mapStateToProps)(App)
+
+export {App, AppContainer}
