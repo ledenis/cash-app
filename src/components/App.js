@@ -22,22 +22,31 @@ class App extends Component {
     // for each item, render facial and count
     return (
       <div>
-        <ul>
-            {this.props.items.map(it => {
-              const facial = it.get('facial')
-              return (
-                <li key={facial}>
-                  <h3>{facial} €</h3>
-                  <input value={it.get('count')}
-                    onChange={(e) =>
-                      this.handleCountChange(facial, e.target.value)}
-                    type="number" min="0" step="1"
-                  />
-                </li>
-              )
-            })}
-        </ul>
-        <p>Total : {this.calcTotal()} €</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Facial value</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+            <tbody>
+              {this.props.items.map(it => {
+                const facial = it.get('facial')
+                const countJsx = <input value={it.get('count')}
+                      onChange={(e) =>
+                        this.handleCountChange(facial, e.target.value)}
+                      type="number" min="0" step="1"
+                    />
+                return (
+                  <tr key={facial}>
+                    <td>{facial} €</td>
+                    <td>{countJsx}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+        </table>
+        <p>Total : {this.calcTotal().toFixed(2)} €</p>
       </div>
     )
   }
