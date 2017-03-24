@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {PageHeader, Panel, Form, FormGroup, Row, Col, ControlLabel, FormControl, Well} from 'react-bootstrap'
 import * as actionCreators from '../action_creators'
 
 class App extends Component {
@@ -32,43 +33,72 @@ class App extends Component {
   renderItemsTable(type) {
     // for each item, render facial, and count (input)
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>Facial value</th>
-            <th>Count</th>
-          </tr>
-        </thead>
-          <tbody>
-            {this.getItemsByType(type).map(it => {
-              const facial = it.get('facial')
-              const countJsx = <input value={it.get('count')}
-                    onChange={(e) =>
-                      this.handleCountChange(facial, e.target.value)}
-                    type="number" min="0" step="1"
-                  />
-              return (
-                <tr key={facial}>
-                  <td>{facial} €</td>
-                  <td>{countJsx}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-      </table>
+      <Form horizontal>
+        {this.getItemsByType(type).map(it => {
+          const facial = it.get('facial')
+          const countJsx = (
+            <FormControl
+              type="number"
+              min="0"
+              step="1"
+              value={it.get('count')}
+              onChange={(e) =>
+                this.handleCountChange(facial, e.target.value)}
+            />
+          )
+          return (
+            <FormGroup>
+              <Col componentClass={ControlLabel} sm={6}>
+                {facial} €
+              </Col>
+              <Col sm={6}>
+                {countJsx}
+              </Col>
+            </FormGroup>
+          )
+        })}
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={6}>Total</Col>
+          <Col sm={6}>
+            <FormControl.Static>
+            {this.calcTotalByType(type).toFixed(2)} €
+            </FormControl.Static>
+          </Col>
+        </FormGroup>
+      </Form>
     )
   }
   
   render() {
     return (
-      <div>
-        <h4>Bills</h4>
-        {this.renderItemsTable('BILL')}
-        <p>Total : {this.calcTotalByType('BILL').toFixed(2)} €</p>
-        <h4>Coins</h4>
-        {this.renderItemsTable('COIN')}
-        <p>Total : {this.calcTotalByType('COIN').toFixed(2)} €</p>
-        <p><strong>TOTAL : {this.calcTotal().toFixed(2)} €</strong></p>
+      <div style={{maxWidth: 800, margin: 10}}>
+        <PageHeader>Cash counter</PageHeader>
+        <Row>
+          <Col sm={4}>
+            <Panel header="Bills">
+              {this.renderItemsTable('BILL')}
+            </Panel>
+          </Col>
+
+          <Col sm={4}>
+            <Panel header="Coins">
+              {this.renderItemsTable('COIN')}
+            </Panel>
+          </Col>
+        
+          <Col sm={4}>
+            <Well>
+              <FormGroup>
+                <ControlLabel>
+                  TOTAL
+                </ControlLabel>
+                <FormControl.Static>
+                  {this.calcTotal().toFixed(2)} €
+                </FormControl.Static>
+              </FormGroup>
+            </Well>
+          </Col>
+        </Row>
       </div>
     )
   }

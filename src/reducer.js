@@ -18,6 +18,19 @@ coinFacials.forEach(facial => {
   })
 })
 
+/*
+state is of the form: {
+  items: [
+    {
+      facial: 500,
+      count: 0,
+      type: 'BILL'
+    },
+    ...
+  ]
+}
+*/
+
 const INITIAL_STATE = fromJS({items})
 
 export default function reducer(state = INITIAL_STATE, action) {
