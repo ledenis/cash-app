@@ -31,41 +31,12 @@ class App extends Component {
   }
   
   renderItemsTable(type) {
-    // for each item, render facial, and count (input)
     return (
-      <Form horizontal>
-        {this.getItemsByType(type).map(it => {
-          const facial = it.get('facial')
-          const countJsx = (
-            <FormControl
-              type="number"
-              min="0"
-              step="1"
-              value={it.get('count')}
-              onChange={(e) =>
-                this.handleCountChange(facial, e.target.value)}
-            />
-          )
-          return (
-            <FormGroup>
-              <Col componentClass={ControlLabel} sm={6}>
-                {facial} €
-              </Col>
-              <Col sm={6}>
-                {countJsx}
-              </Col>
-            </FormGroup>
-          )
-        })}
-        <FormGroup>
-          <Col componentClass={ControlLabel} sm={6}>Total</Col>
-          <Col sm={6}>
-            <FormControl.Static>
-            {this.calcTotalByType(type).toFixed(2)} €
-            </FormControl.Static>
-          </Col>
-        </FormGroup>
-      </Form>
+      <ItemsTable
+        items={this.getItemsByType(type)}
+        total={this.calcTotalByType(type).toFixed(2)}
+        onCountChange={this.handleCountChange.bind(this)}
+      />
     )
   }
   
@@ -103,6 +74,46 @@ class App extends Component {
     )
   }
 }
+
+const ItemsTable = ({items, total, onCountChange}) => (
+  // for each item, render facial, and count (input)
+  <Form horizontal>
+    {items.map(it => {
+      return <CashInputLine
+        facial={it.get('facial')}
+        count={it.get('count')}
+        onCountChange={onCountChange}
+        key={it.get('facial')}
+        />
+    })}
+
+    <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>Total</Col>
+      <Col sm={6}>
+        <FormControl.Static>
+        {total} €
+        </FormControl.Static>
+      </Col>
+    </FormGroup>
+  </Form>
+)
+
+const CashInputLine = ({facial, count, onCountChange}) => (
+  <FormGroup>
+    <Col componentClass={ControlLabel} sm={6}>
+      {facial} €
+    </Col>
+    <Col sm={6}>
+      <FormControl
+        type="number"
+        min="0"
+        step="1"
+        value={count}
+        onChange={(e) => onCountChange(facial, e.target.value)}
+      />
+    </Col>
+  </FormGroup>
+)
 
 
 function mapStateToProps(state) {
