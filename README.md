@@ -7,6 +7,11 @@ DEMO: https://cash-app-demo.herokuapp.com/
 ## Running the app
 
     npm install
+
+    cd client
+    npm install
+    
+    cd ..
     npm start
 
 ## Libraries used
